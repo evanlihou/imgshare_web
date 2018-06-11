@@ -1,19 +1,16 @@
 {
   "name": "imgshare_web",
   "version": "0.1.0",
-  "description": "Web frontend for imgshare",
-  "main": "index.js",
+  "private": true,
+  "dependencies": {
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0",
+    "react-scripts": "1.1.4"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/evanlihou/imgshare_web.git"
-  },
-  "author": "Evan Lihou",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/evanlihou/imgshare_web/issues"
-  },
-  "homepage": "https://github.com/evanlihou/imgshare_web#readme"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
 }
