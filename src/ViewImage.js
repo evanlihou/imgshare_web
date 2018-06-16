@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import Moment from  'moment';
+import {withCookies} from 'react-cookie';
 import './App.css';
+import './ViewImage.css';
 
 class ViewImage extends Component {
   constructor() {
@@ -7,18 +10,37 @@ class ViewImage extends Component {
     this.state = {
       loading: true,
       imageData: null,
-      imgLoadError: ""
+      imgLoadError: "",
+      showImg: false
     }
   }
   componentDidMount() {
-    fetch('http://localhost:8000/getImage/'+this.props.match.params.imgId).then(res => {
+    var {cookies} = this.props
+    var api_key = (cookies.get('user') ? cookies.get('user').api_key : null)
+    fetch('http://localhost:8000/getImage',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          url: this.props.match.params.imgId,
+          api_key: api_key
+        }),
+        headers: {
+            'content-type': 'application/json'
+        }
+      }).then(res => {
       res.json().then(data => {
-        if (res.status !== 200) {
+        if (!res.ok) {
           this.setState({imgLoadError: data.message, loading: false})
-          console.log(data, res)
         } else {
-          this.setState({imageData: data.image_data, loading: false})
-          console.log(data.image_data)
+          var created_date = new Moment(data.created_at)
+          this.setState({
+            imageData: data.image_data,
+            created_at: created_date.format('MMM D, YYYY h:mm a'),
+            created_by: data.username,
+            private: data.is_private,
+            loading: false
+          })
+          setTimeout(function() {this.setState({showImg: true}); console.log(this)}.bind(this), 100)
         }
       })
     })
@@ -28,10 +50,25 @@ class ViewImage extends Component {
       <div className="ViewImagePage">
         {this.state.loading && <p>Loading...</p>}
         {this.state.imgLoadError && <p>{this.state.imgLoadError}</p>}
-        {!this.state.loading && !this.state.imgLoadError && <img src={this.state.imageData} />}
+        {!this.state.loading && !this.state.imgLoadError && 
+          <div className="content">
+            {this.state.private &&
+              <p>This image is private.</p>
+            }
+            <div className="mainImage">
+              <img src={this.state.imageData} alt="User uploaded" style={{opacity: (this.state.showImg ? 1 : 0)}}/>
+            </div>
+            <div className="metadata">
+              <div className="date">Uploaded: {this.state.created_at}</div>
+              {this.state.created_by && 
+                <div className="user">{this.state.created_by}</div>
+              }
+            </div>
+          </div>
+        }
       </div>
     );
   }
 }
 
-export default ViewImage;
+export default withCookies(ViewImage);

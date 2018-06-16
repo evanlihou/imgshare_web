@@ -1,0 +1,13 @@
+h1 {
+  text-align: center;
+}
+
+.UploadPage {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.options {
+  display: flex;
+  justify-content: space-around;
+}
