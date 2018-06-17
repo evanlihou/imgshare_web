@@ -97,7 +97,7 @@ class Upload extends Component {
   };
 
   pasteHandler = () => {
-    if (!window.Clipboard) {
+    if (!window.ClipboardEvent) {
       alert(
         "Your browser does not support clipboard management, use Chrome instead."
       );
