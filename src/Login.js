@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 import {withCookies} from 'react-cookie'
+import { Form } from 'semantic-ui-react';
 
 class Login extends Component {
     constructor(props) {
@@ -61,14 +62,16 @@ class Login extends Component {
                 <div style={{backgroundColor: "red", color: "white"}}><p style={{color: "black", margin: "0", padding: "15px 0"}}>{this.state.error_msg}</p></div>
             }
             {this.state.authenticated && 
-                <Redirect to="/upload" />
+                <Redirect to="/upload" push={true} />
             }
             <h1>Login</h1>
-            <label>Username</label>
-            <input name="username" type="text" onChange={this.handleChange}></input>
-            <label>Password</label>
-            <input name="password" type="password" onChange={this.handleChange}></input>
-            <button onClick={this.submitForm}>Log in</button>
+            <Form style={{maxWidth: "600px", width: "80%", margin: "0 auto"}}>
+                <label>Username</label>
+                <Form.Input name="username" type="text" onChange={this.handleChange}></Form.Input>
+                <label>Password</label>
+                <Form.Input name="password" type="password" onChange={this.handleChange}></Form.Input>
+                <Form.Button onClick={this.submitForm} primary fluid>Log in</Form.Button>
+            </Form>
         </div>
         );
     }
