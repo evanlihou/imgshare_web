@@ -1,22 +1,22 @@
-import React, { Component } from 'react';
-import { Switch, Route } from 'react-router-dom';
-import { PropTypes, instanceOf } from 'prop-types';
-import { withCookies, Cookies } from 'react-cookie';
-import { Menu, Input, Form } from 'semantic-ui-react'
-import ViewImage from './ViewImage';
-import Upload from './Upload'
-import Root from './Root';
-import Login from './Login';
-import './App.css';
-import 'semantic-ui-css/semantic.min.css';
+import React, { Component } from "react";
+import { Switch, Route } from "react-router-dom";
+import { PropTypes, instanceOf } from "prop-types";
+import { withCookies, Cookies } from "react-cookie";
+import { Menu, Input, Form } from "semantic-ui-react";
+import ViewImage from "./ViewImage";
+import Upload from "./Upload";
+import Root from "./Root";
+import Login from "./Login";
+import "./App.css";
+import "semantic-ui-css/semantic.min.css";
 
 class App extends Component {
   static contextTypes = {
     router: PropTypes.object
-  }
+  };
   static propTypes = {
     cookies: instanceOf(Cookies).isRequired
-  }
+  };
   constructor(props, context) {
     super(props, context);
   }
@@ -24,8 +24,8 @@ class App extends Component {
   componentWillMount(props) {
     const { cookies } = this.props;
     this.setState({
-      user: cookies.get('user')
-    })
+      user: cookies.get("user")
+    });
   }
   render() {
     return (
@@ -36,9 +36,7 @@ class App extends Component {
           <Route path="/:imgId([0-9a-z]{5})" component={ViewImage} />
           <Route exact path="/" component={Root} />
           <Route>
-            <h1>
-              404
-            </h1>
+            <h1>404</h1>
           </Route>
         </Switch>
       </div>
