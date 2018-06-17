@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Switch, Route } from "react-router-dom";
 import { PropTypes, instanceOf } from "prop-types";
 import { withCookies, Cookies } from "react-cookie";
-import { Menu, Input, Form } from "semantic-ui-react";
 import ViewImage from "./ViewImage";
 import Upload from "./Upload";
 import Root from "./Root";

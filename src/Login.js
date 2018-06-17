@@ -22,7 +22,7 @@ class Login extends Component {
   submitForm = () => {
     const { cookies } = this.props;
     this.setState({ loading: true });
-    fetch("http://localhost:8000/authenticate", {
+    fetch("http://i.evanlihou.com/api/authenticate", {
       method: "POST",
       body: JSON.stringify({
         username: this.state.username,

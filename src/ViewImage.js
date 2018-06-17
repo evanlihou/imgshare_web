@@ -17,7 +17,7 @@ class ViewImage extends Component {
   componentDidMount() {
     var { cookies } = this.props;
     var api_key = cookies.get("user") ? cookies.get("user").api_key : null;
-    fetch("http://localhost:8000/getImage", {
+    fetch("http://i.evanlihou.com/api/getImage", {
       method: "POST",
       body: JSON.stringify({
         url: this.props.match.params.imgId,

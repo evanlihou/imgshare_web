@@ -65,7 +65,7 @@ class Upload extends Component {
       return null;
     }
     this.setState({ uploading: true });
-    fetch("http://localhost:8000/uploadImage", {
+    fetch("http://i.evanlihou.com/api/uploadImage", {
       method: "POST",
       body: JSON.stringify({
         img_data: img_data,
