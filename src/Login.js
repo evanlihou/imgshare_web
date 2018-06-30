@@ -22,7 +22,7 @@ class Login extends Component {
   submitForm = () => {
     const { cookies } = this.props;
     this.setState({ loading: true });
-    fetch("http://localhost:8000/authenticate", {
+    fetch("http://localhost:8000/api/authenticate", {
       method: "POST",
       body: JSON.stringify({
         username: this.state.username,
@@ -38,7 +38,8 @@ class Login extends Component {
             this.setState({ loading: false });
             this.showError(data.message);
           } else {
-            cookies.set("user", data, { path: "/", maxAge: 86400 });
+            let userData = btoa(JSON.stringify(data))
+            cookies.set("user", userData, { path: "/", maxAge: 86400 });
             this.setState({ authenticated: true });
           }
         });
@@ -73,12 +74,14 @@ class Login extends Component {
           <Form.Input
             name="username"
             type="text"
+            autoComplete="username"
             onChange={this.handleChange}
           />
           <label>Password</label>
           <Form.Input
             name="password"
             type="password"
+            autoComplete="current-password"
             onChange={this.handleChange}
           />
           <Form.Button onClick={this.submitForm} primary fluid>

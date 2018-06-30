@@ -4,6 +4,7 @@ import { withCookies } from "react-cookie";
 import { Redirect } from "react-router";
 import { Checkbox, Dropdown } from "semantic-ui-react";
 import Moment from "moment";
+import DropZone from 'react-dropzone';
 import "./Upload.css";
 
 var expiry_options = [
@@ -53,28 +54,29 @@ class Upload extends Component {
   }
 
   showError = msg => {
+    console.log(msg)
     this.setState({
       error: true,
       error_msg: msg
     });
   };
 
-  uploadImage = img_data => {
+  uploadImageData = (img_data) => {
     if (!this.state.user) {
       this.showError("You are not logged in.");
       return null;
     }
     this.setState({ uploading: true });
-    fetch("http://localhost:8000/uploadImage", {
+    fetch("http://localhost:8000/api/uploadImage", {
       method: "POST",
       body: JSON.stringify({
         img_data: img_data,
-        api_key: this.state.user.api_key,
         is_private: this.state.uploadPrivacy,
         expires_at: this.state.expires_at
       }),
       headers: {
-        "content-type": "application/json"
+        "content-type": "application/json",
+        api_key: this.state.user.api_key
       }
     })
       .then(res => {
@@ -96,13 +98,54 @@ class Upload extends Component {
       });
   };
 
-  pasteHandler = () => {
-    if (!window.Clipboard) {
-      alert(
-        "Your browser does not support clipboard management, use Chrome instead."
-      );
+  uploadImageFile = (img_file) => {
+    if (!this.state.user) {
+      this.showError("You are not logged in.");
+      return null;
     }
-    new CLIPBOARD_CLASS(document, true, this.uploadImage, this.showError);
+    this.setState({ uploading: true });
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      const file = event.target.result
+      let data = new FormData()
+      data.append("img_file", file)
+      data.append("is_private", this.state.uploadPrivacy)
+      data.append("expires_at", this.state.expires_at)
+      fetch("http://localhost:8000/api/uploadImage", {
+        method: "POST",
+        body: data,
+        headers: {
+          "content-type": "application/json",
+          api_key: this.state.user.api_key
+        }
+      })
+        .then(res => {
+          res.json().then(data => {
+            if (!res.ok) {
+              this.setState({ uploading: false });
+              this.showError(data.message);
+            } else {
+              this.setState({
+                imgID: data.url,
+                uploaded: true
+              });
+            }
+          });
+        })
+        .catch(err => {
+          this.setState({ uploading: false });
+          this.showError(err);
+        });
+    }
+    reader.readAsArrayBuffer(img_file)
+  };
+
+  filesDropped = (files) => {
+    this.uploadImageFile(files[0])
+  }
+
+  pasteHandler = () => {
+    new CLIPBOARD_CLASS(this.uploadImageData, this.showError);
 
     /**
      * image pasting into canvas
@@ -110,12 +153,7 @@ class Upload extends Component {
      * @param string canvas_id canvas id
      * @param boolean autoresize if canvas will be resized
      */
-    function CLIPBOARD_CLASS(
-      canvas_id,
-      autoresize,
-      upload_callback,
-      err_callback
-    ) {
+    function CLIPBOARD_CLASS(upload_callback, err_callback) {
       var _self = this;
 
       document.addEventListener(
@@ -177,8 +215,12 @@ class Upload extends Component {
     this.pasteHandler();
     var { cookies } = this.props;
     if (cookies.get("user")) {
+      let userData = cookies.get("user")
+      userData = decodeURI(userData)
+      userData = JSON.parse(atob(userData))
+      console.log(userData.api_key)
       this.setState({
-        user: cookies.get("user")
+        user: userData
       });
     } else {
       this.showError(
@@ -229,6 +271,15 @@ class Upload extends Component {
             This image will expire on {this.state.expires_at.format("ll LT")}
           </p>
         )}
+        <div className="dropzone">
+          <DropZone
+            onDrop={this.filesDropped.bind(this)}
+            accept="image/jpeg, image/png"
+            multiple={false}
+          >
+            Drag and drop an image here, or click to select an image
+          </DropZone>
+        </div>
       </div>
     );
   }

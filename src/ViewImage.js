@@ -16,14 +16,18 @@ class ViewImage extends Component {
   }
   componentDidMount() {
     var { cookies } = this.props;
-    var api_key = cookies.get("user") ? cookies.get("user").api_key : null;
-    fetch("http://localhost:8000/getImage", {
-      method: "POST",
-      body: JSON.stringify({
-        url: this.props.match.params.imgId,
-        api_key: api_key
-      }),
+    if (cookies.get("user")) {
+      let userData = cookies.get("user")
+      userData = decodeURI(userData)
+      userData = JSON.parse(atob(userData))
+      var api_key = userData.api_key
+    } else {
+      var api_key = null;
+    }
+    fetch(`http://localhost:8000/api/getImage/${this.props.match.params.imgId}`, {
+      method: "GET",
       headers: {
+        api_key: api_key,
         "content-type": "application/json"
       }
     }).then(res => {
