@@ -3,20 +3,25 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "animated": "^0.2.2",
+    "dotenv": "^6.0.0",
     "moment": "^2.22.2",
-    "react": "^16.4.0",
+    "react": "^16.4.2",
     "react-cookie": "^2.2.0",
-    "react-dom": "^16.4.0",
-    "react-dropzone": "^4.2.12",
+    "react-dom": "^16.4.2",
+    "react-dropzone": "^4.3.0",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "1.1.4",
-    "semantic-ui-css": "^2.3.1",
-    "semantic-ui-react": "^0.81.1"
+    "react-router-page-transition": "^3.1.0",
+    "react-scripts": "^2.1.1",
+    "react-transition-group": "^2.5.0",
+    "semantic-ui-css": "^2.3.3",
+    "semantic-ui-react": "^0.81.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "REACT_APP_API_URL=http://localhost:8000/api react-scripts start",
+    "build": "REACT_APP_API_URL=https://i.evanlihou.com/api react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
-  }
+  },
+  "devDependencies": {}
 }
