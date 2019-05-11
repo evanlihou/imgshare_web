@@ -6,7 +6,7 @@
     "moment": "^2.22.2",
     "react": "^16.4.0",
     "react-cookie": "^2.2.0",
-    "react-dom": "^16.4.0",
+    "react-dom": "^16.8.6",
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
     "semantic-ui-css": "^2.3.1",
